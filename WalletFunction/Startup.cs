@@ -16,16 +16,8 @@ namespace WalletFunction
 {
     internal class Startup : IWebJobsStartup
     {
-        public Startup(ILogger log)
-        {
-            Log = log;
-        }
-
-        public ILogger Log { get; }
-
         public void Configure(IWebJobsBuilder builder)
         {
-            Log.LogInformation("Started startup");
             var configBuilder = new ConfigurationBuilder();
             var config = configBuilder.Build();
             builder.Services.PostConfigure<CosmosDBOptions>(options =>
