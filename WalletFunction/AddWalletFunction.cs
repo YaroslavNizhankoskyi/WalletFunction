@@ -13,8 +13,6 @@ namespace WalletFunction
 {
     public static class AddWalletFunction
     {
-        public static string str = Environment.GetEnvironmentVariable("CosmosDbConnectionString");
-
         [FunctionName("AddWalletFunction")]
             public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
