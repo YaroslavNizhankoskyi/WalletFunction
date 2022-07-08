@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace WalletFunction.Models
 {
-    public class Wallet
+    public class WalletDto
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         public double Amount { get; set; }

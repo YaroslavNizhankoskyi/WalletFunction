@@ -19,30 +19,24 @@ namespace WalletFunction
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "wallet",
-            ConnectionStringSetting = "AccountEndpoint=https://wallet-niz-db.documents.azure.com:443/;AccountKey=yHgSIx0Bm9ZhKcCERmcAyn0P6cMZ1MCr1le9c591Mikbi6EMKL7t2YSP8TM9BF3LyKoEOOuAMkpeeKmICb8XdQ==")]IAsyncCollector<dynamic> documentsOut,
+            ConnectionStringSetting = "AccountEndpoint=https://wallet-niz-db.documents.azure.com:443/;AccountKey=yHgSIx0Bm9ZhKcCERmcAyn0P6cMZ1MCr1le9c591Mikbi6EMKL7t2YSP8TM9BF3LyKoEOOuAMkpeeKmICb8XdQ==")]
+        IAsyncCollector<dynamic> documentsOut,
         ILogger log)
         {
-            try
-            {
-                log.LogInformation("C# HTTP trigger function processed a request.");
-                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                var data = JsonConvert.DeserializeObject<Wallet>(requestBody);
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var data = JsonConvert.DeserializeObject<WalletDto>(requestBody);
 
-                var wallet = new Wallet
-                {
-                    WalletId = Guid.NewGuid(),
-                    Amount = data.Amount,
-                    Name = data.Name,
-                    UserId = data.UserId
-                };
-                await documentsOut.AddAsync(wallet);
-
-                return new OkObjectResult(wallet.WalletId);
-            }
-            catch (Exception ex)
+            var wallet = new Wallet
             {
-                return new OkObjectResult(ex.StackTrace);
-            }        
+                Id = Guid.NewGuid(),
+                Amount = data.Amount,
+                Name = data.Name,
+                UserId = data.UserId
+            };
+            await documentsOut.AddAsync(wallet);
+
+            return new OkObjectResult(wallet.Id);     
         }
     }
 }
