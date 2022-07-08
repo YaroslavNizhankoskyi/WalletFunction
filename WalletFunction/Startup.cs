@@ -16,6 +16,7 @@ namespace WalletFunction
 {
     internal class Startup : IWebJobsStartup
     {
+
         public void Configure(IWebJobsBuilder builder)
         {
             var configBuilder = new ConfigurationBuilder();
