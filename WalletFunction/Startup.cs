@@ -21,7 +21,7 @@ namespace WalletFunction
             var config = configBuilder.Build();
             builder.Services.PostConfigure<CosmosDBOptions>(options =>
             {
-                options.ConnectionString = Environment.GetEnvironmentVariable("CosmosDbConnectionString");
+                options.ConnectionString = config["CosmosDbConnectionString"];
             });
         }
     }

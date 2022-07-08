@@ -19,23 +19,30 @@ namespace WalletFunction
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "wallet",
-            ConnectionStringSetting = "")]IAsyncCollector<dynamic> documentsOut,
+            ConnectionStringSetting = "AccountEndpoint=https://wallet-niz-db.documents.azure.com:443/;AccountKey=yHgSIx0Bm9ZhKcCERmcAyn0P6cMZ1MCr1le9c591Mikbi6EMKL7t2YSP8TM9BF3LyKoEOOuAMkpeeKmICb8XdQ==")]IAsyncCollector<dynamic> documentsOut,
         ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var data = JsonConvert.DeserializeObject<Wallet>(requestBody);
-
-            var wallet = new Wallet
+            try
             {
-                WalletId = Guid.NewGuid(),
-                Amount = data.Amount,
-                Name = data.Name,
-                UserId = data.UserId
-            };
-            await documentsOut.AddAsync(wallet);
+                log.LogInformation("C# HTTP trigger function processed a request.");
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                var data = JsonConvert.DeserializeObject<Wallet>(requestBody);
 
-            return new OkObjectResult(wallet.WalletId);
+                var wallet = new Wallet
+                {
+                    WalletId = Guid.NewGuid(),
+                    Amount = data.Amount,
+                    Name = data.Name,
+                    UserId = data.UserId
+                };
+                await documentsOut.AddAsync(wallet);
+
+                return new OkObjectResult(wallet.WalletId);
+            }
+            catch (Exception ex)
+            {
+                return new OkObjectResult(ex.StackTrace);
+            }        
         }
     }
 }
