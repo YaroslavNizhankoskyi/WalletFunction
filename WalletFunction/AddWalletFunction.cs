@@ -19,7 +19,7 @@ namespace WalletFunction
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "wallet",
-            ConnectionStringSetting = "AccountEndpoint=https://wallet-niz-db.documents.azure.com:443/;AccountKey=yHgSIx0Bm9ZhKcCERmcAyn0P6cMZ1MCr1le9c591Mikbi6EMKL7t2YSP8TM9BF3LyKoEOOuAMkpeeKmICb8XdQ==")]
+            ConnectionStringSetting = "CosmosDbConnectionString")]
         IAsyncCollector<dynamic> documentsOut,
         ILogger log)
         {
