@@ -22,9 +22,9 @@ namespace WalletFunction
             collectionName: "wallet",
             ConnectionStringSetting = "CosmosDbConnectionString",
             SqlQuery = 
-                "SELECT * FROM c " +
-                "ORDER BY name DESC" +
-                "WHERE userId={id}")]
+                "SELECT * FROM c " +                
+                "WHERE userId={id} " +
+                "ORDER BY name DESC" )]
         IEnumerable<Wallet> wallets,
         ILogger log)
         {
