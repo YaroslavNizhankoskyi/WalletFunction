@@ -39,6 +39,7 @@ namespace WalletFunction
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 465, true);
             smtp.AuthenticationMechanisms.Remove("XOAUTH2");
+            log.LogInformation(Environment.GetEnvironmentVariable("SenderEmail") + Environment.GetEnvironmentVariable("SenderPassword"));
             smtp.Authenticate(Environment.GetEnvironmentVariable("SenderEmail"),
                 Environment.GetEnvironmentVariable("SenderPassword"));
             var response = await smtp.SendAsync(email);
