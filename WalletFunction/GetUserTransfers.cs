@@ -24,10 +24,19 @@ namespace WalletFunction
             SqlQuery = "SELECT * FROM c " +
             "WHERE c.walletId = {walletId} " +
             "AND c.category = {category}")]
-        IEnumerable<Transfer> transfers,
+        IEnumerable<TransferDto> transferDtos,
         ILogger log)
         {
-            return new OkObjectResult(transfers);
+            return new OkObjectResult
+                (
+                    transferDtos.Select(x => new Transfer
+                    {
+                        Amount = x.Amount,
+                        Category = x.Category,
+                        WalletId = Guid.Parse(x.WalletId),
+                        Id = Guid.Parse(x.Id)
+                    })
+                );
         }
     }
 }
