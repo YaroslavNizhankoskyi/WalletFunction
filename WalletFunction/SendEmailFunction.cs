@@ -10,13 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WalletFunction.Models;
+using SendGrid.Helpers.Mail;
 
 namespace WalletFunction
 {
     internal static class SendEmailFunction
     {
         [FunctionName("EmailBusTrigger")]
-        public static async Task Run(
+        [return: SendGrid(ApiKey = "SendGridApiKey")]
+        public static SendGridMessage Run(
         [ServiceBusTrigger("email", Connection = "ServiceBusConnectionString")]
         EmailMessageDto emailDto,
         DateTime enqueuedTimeUtc,
@@ -27,24 +29,18 @@ namespace WalletFunction
             log.LogInformation($"Time: {enqueuedTimeUtc}");
             log.LogInformation($"MessageId: {messageId}");
 
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(Environment.GetEnvironmentVariable("SenderEmail")));
-            email.To.Add(MailboxAddress.Parse(emailDto.UserEmail));
-            email.Subject = "Low budget";
-            email.Body = new TextPart(TextFormat.Plain) 
+            log.LogInformation($"SendEmailTimer executed at: {DateTime.Now}");
+
+            var msg = new SendGridMessage()
             {
-                Text = $"Your wallet {emailDto.WalletName}, has low blance of {emailDto.LeftAmount}" 
+                From = new EmailAddress(Environment.GetEnvironmentVariable("SenderEmail"), "Yaroslav Nizhankovskyi"),
+                Subject = $"You have low budget on {emailDto.WalletName}",
+                PlainTextContent = $"Your wallet {emailDto.WalletName} has low budget of {emailDto.LeftAmount}"
             };
+            
+            msg.AddTo(new EmailAddress(emailDto.UserEmail, emailDto.UserEmail));
 
-            using var smtp = new SmtpClient();
-            smtp.Connect("smtp.gmail.com", 465, true);
-            smtp.AuthenticationMechanisms.Remove("XOAUTH2");
-            log.LogInformation(Environment.GetEnvironmentVariable("SenderEmail") + Environment.GetEnvironmentVariable("SenderPassword"));
-            smtp.Authenticate(Environment.GetEnvironmentVariable("SenderEmail"),
-                Environment.GetEnvironmentVariable("SenderPassword"));
-            var response = await smtp.SendAsync(email);
-            smtp.Disconnect(true);
-
+            return msg;
         }
     }
 }
