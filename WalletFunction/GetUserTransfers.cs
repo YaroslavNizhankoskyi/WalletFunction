@@ -16,20 +16,20 @@ namespace WalletFunction
     {
         [FunctionName("GetUserTransfers")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "transfers")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "transfers/{walletId}/{category}")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "transfers",
             ConnectionStringSetting = "CosmosDbConnectionString",
-            SqlQuery = "SELECT * FROM c " + 
-            "WHERE c.UserId != '51769c74-f41d-4d54-b333-259ce2223201' " +
-            "AND 300 != null " +
-            "? c.Amount = 300 " +
-            ": c.Name = 'wallet yaros'")]
-        IEnumerable<Transfer> wallets,
+            SqlQuery = "SELECT * FROM c " +
+            "WHERE {walletId} != null " +            
+            "? c.WalletId = {walletId} " +
+            ": c.Amount != 0 " +
+            "AND c.Category = {category}")]
+        IEnumerable<Transfer> transfers,
         ILogger log)
         {
-            return new OkObjectResult(wallets);
+            return new OkObjectResult(transfers);
         }
     }
 }
