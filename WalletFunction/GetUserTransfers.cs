@@ -27,16 +27,7 @@ namespace WalletFunction
         IEnumerable<TransferDto> transferDtos,
         ILogger log)
         {
-            return new OkObjectResult
-                (
-                    transferDtos.Select(x => new Transfer
-                    {
-                        Amount = x.Amount,
-                        Category = x.Category,
-                        WalletId = Guid.Parse(x.WalletId),
-                        Id = Guid.Parse(x.Id)
-                    })
-                );
+            return new OkObjectResult(transferDtos);
         }
     }
 }
