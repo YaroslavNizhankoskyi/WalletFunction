@@ -22,8 +22,8 @@ namespace WalletFunction
             collectionName: "transfers",
             ConnectionStringSetting = "CosmosDbConnectionString",
             SqlQuery = "SELECT * FROM c " +
-            "WHERE c.WalletId = {walletId} " +
-            "AND c.Category = {category}")]
+            "WHERE c.walletId = {walletId} " +
+            "AND c.category = {category}")]
         IEnumerable<Transfer> transfers,
         ILogger log)
         {
