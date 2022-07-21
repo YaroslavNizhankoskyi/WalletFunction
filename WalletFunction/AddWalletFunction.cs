@@ -15,7 +15,7 @@ namespace WalletFunction
     {
         [FunctionName("AddWalletFunction")]
             public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "wallets")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "wallet",

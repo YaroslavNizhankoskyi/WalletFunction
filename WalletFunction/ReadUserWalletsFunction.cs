@@ -16,14 +16,14 @@ namespace WalletFunction
     {
         [FunctionName("ReadUserWalletsFunction")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/{id}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/{userId}/wallets")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "wallet",
             ConnectionStringSetting = "CosmosDbConnectionString",
             SqlQuery = 
-                "SELECT * FROM c " +                
-                "WHERE c.UserId = {id} " +
+                "SELECT * FROM c " +
+                "WHERE c.UserId = {userId} " +
                 "ORDER BY c.Name DESC" )]
         IEnumerable<Wallet> wallets,
         ILogger log)

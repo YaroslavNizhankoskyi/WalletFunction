@@ -16,7 +16,7 @@ namespace WalletFunction
     {
         [FunctionName("GetWeekTransferStats")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "transfers/{walletId}/stats")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "wallets/{walletId}/transfers/stats")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "transfers",
