@@ -8,8 +8,8 @@ namespace WalletFunction.Models
 {
     internal class WeekTransferStats
     {
-        public int WeeklyIncome { get; set; }
+        public double WeeklyIncome { get; set; }
 
-        public List<TransferDayStat> WeekStats { get; set; }
+        public List<TransferDayStat> WeekStats { get; set; } = new List<TransferDayStat>();
     }
 }

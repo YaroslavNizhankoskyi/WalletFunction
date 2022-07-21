@@ -29,10 +29,23 @@ namespace WalletFunction
         IEnumerable<TransferDto> transferDtos,
         ILogger log)
         {
+            var income = transferDtos.Select(x => x.Amount).Sum();
 
+            var transfersGroupedByDay = transferDtos.GroupBy(x => x.Date.DayOfWeek);
 
+            var stats = new WeekTransferStats() { WeeklyIncome = income };
 
-            return new OkObjectResult(transferDtos);
+            foreach(var dayTransfers in transfersGroupedByDay)
+            {
+                var day = dayTransfers.Single().Date.DayOfWeek.ToString();
+                stats.WeekStats.Add(new TransferDayStat
+                {
+                    Day = Enum.GetName(day.GetType(), day),
+                    Income = dayTransfers.Select(x => x.Amount).Sum()
+                });
+            }
+
+            return new OkObjectResult(stats);
         }
     }
 }

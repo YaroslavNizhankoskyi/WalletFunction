@@ -2,7 +2,7 @@
 {
     public class TransferDayStat
     {
-        public int Income { get; set; }
+        public double Income { get; set; }
 
         public string Day { get; set; }
     }
