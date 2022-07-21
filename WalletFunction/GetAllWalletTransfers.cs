@@ -12,18 +12,18 @@ using WalletFunction.Models;
 
 namespace WalletFunction
 {
-    internal class GetUserTransfers
+    internal class GetAllUserTransfer
     {
-        [FunctionName("GetUserTransfers")]
+        [FunctionName("GetAllWalletTransfers")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "transfers/{walletId}/{category}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "transfers/{walletId}")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "transfers",
             ConnectionStringSetting = "CosmosDbConnectionString",
-            SqlQuery = "SELECT * FROM c " +
+            SqlQuery = "SELECT TOP 10 * FROM c " +
             "WHERE c.walletId = {walletId} " +
-            "AND c.category = {category}")]
+            "ORDER BY c.date DESC")]
         IEnumerable<TransferDto> transferDtos,
         ILogger log)
         {

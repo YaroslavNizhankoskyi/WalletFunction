@@ -15,5 +15,7 @@ namespace WalletFunction.Models
         public string Category { get; set; }
 
         public double Amount { get; set; }
+
+        public DateTimeOffset Date { get; set; }
     }
 }
