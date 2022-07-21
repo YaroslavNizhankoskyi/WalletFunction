@@ -16,7 +16,7 @@ namespace WalletFunction
     {
         [FunctionName("GetWeekTransferStats")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "wallets/{walletId}/transfers/stats")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "wallets/{walletId}/transfers/stats")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "transfers",
@@ -29,7 +29,12 @@ namespace WalletFunction
         IEnumerable<TransferDto> transferDtos,
         ILogger log)
         {
+
             var income = transferDtos.Select(x => x.Amount).Sum();
+
+            log.LogInformation(income.ToString());
+            log.LogInformation(transferDtos.Count().ToString());
+            log.LogInformation(Enum.GetName(typeof(DayOfWeek), transferDtos.First().Date.DayOfWeek));
 
             var transfersGroupedByDay = transferDtos.GroupBy(x => x.Date.DayOfWeek);
 
