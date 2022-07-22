@@ -39,13 +39,25 @@ namespace WalletFunction
 
             var stats = new WeekTransferStats() { WeeklyIncome = income };
 
-            foreach (var dayTransfers in transfersGroupedByDay)
+            var today = DateTimeOffset.Now;
+            
+            for(var i = -6; i <= 0; i++)
             {
-                stats.WeekStats.Add(new TransferDayStat
-                {
-                    Day = dayTransfers.Single().Date.DayOfWeek.ToString(),
-                    Income = dayTransfers.Select(x => x.Amount).Sum()
-                });
+                var dayOfWeek = today.AddDays(i).DayOfWeek;
+
+                var dayStat = new TransferDayStat { Day = dayOfWeek.ToString() };
+
+                var group = transfersGroupedByDay.FirstOrDefault(x => x.Key == dayOfWeek);
+
+                dayStat.Income = group == null ? 0 : group.Select(x => x.Amount).Sum();
+
+                stats.WeekStats.Add(dayStat);
+            }
+
+            foreach(var day in stats.WeekStats)
+            {
+                stats.Days.Add(day.Day.Substring(0, 3));
+                stats.Incomes.Add(day.Income);
             }
 
             return new OkObjectResult(stats);
