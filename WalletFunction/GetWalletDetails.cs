@@ -24,8 +24,7 @@ namespace WalletFunction
             SqlQuery =
                 "SELECT * FROM c " +
                 "WHERE c.id = {walletId} ")]
-        IEnumerable<Wallet> wallets,
-        ILogger log)
+        IEnumerable<Wallet> wallets)
         {
             return new OkObjectResult(wallets.FirstOrDefault());
         }

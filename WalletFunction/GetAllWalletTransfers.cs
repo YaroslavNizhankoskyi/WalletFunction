@@ -24,8 +24,7 @@ namespace WalletFunction
             SqlQuery = "SELECT TOP 10 * FROM c " +
             "WHERE c.walletId = {walletId} " +
             "ORDER BY c.date DESC")]
-        IEnumerable<TransferDto> transferDtos,
-        ILogger log)
+        IEnumerable<TransferDto> transferDtos)
         {
             return new OkObjectResult(transferDtos);
         }

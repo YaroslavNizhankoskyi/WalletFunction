@@ -25,8 +25,7 @@ namespace WalletFunction
             "WHERE c.walletId = {walletId} " +
             "AND c.category = {category} " +
             "ORDER BY c.date DESC")]
-        IEnumerable<TransferDto> transferDtos,
-        ILogger log)
+        IEnumerable<TransferDto> transferDtos)
         {
             return new OkObjectResult(transferDtos);
         }

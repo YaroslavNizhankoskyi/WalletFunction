@@ -16,7 +16,7 @@ namespace WalletFunction
     {
         [FunctionName("GetWeekTransferStats")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "wallets/{walletId}/transfers/stats")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "wallets/{walletId}/transfers/stats/days/{days}")] HttpRequest req,
         [CosmosDB(
             databaseName: "wallet-niz",
             collectionName: "transfers",
@@ -24,10 +24,10 @@ namespace WalletFunction
             SqlQuery = "SELECT c.amount, udf.utcToDate(c.date) as date, c.walletId, c.category, c.id "+ 
             "FROM  c " +
             "WHERE c.walletId = {walletId} " +
-            "AND udf.utcToDate(c.date) > udf.lastWeek()" +
+            "AND udf.utcToDate(c.date) > udf.getDateBefore({days})" +
             "ORDER BY c.date DESC")]
         IEnumerable<TransferDto> transferDtos,
-        ILogger log)
+        ILogger log, [FromRoute] int days)
         {
             var income = transferDtos.Select(x => x.Amount).Sum();
 
@@ -41,7 +41,7 @@ namespace WalletFunction
 
             var today = DateTimeOffset.Now;
             
-            for(var i = -6; i <= 0; i++)
+            for(var i = -days; i <= 0; i++)
             {
                 var dayOfWeek = today.AddDays(i).DayOfWeek;
 

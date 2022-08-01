@@ -25,8 +25,7 @@ namespace WalletFunction
                 "SELECT * FROM c " +
                 "WHERE c.UserId = {userId} " +
                 "ORDER BY c.Name DESC" )]
-        IEnumerable<Wallet> wallets,
-        ILogger log)
+        IEnumerable<Wallet> wallets)
         {
             return new OkObjectResult(wallets);
         }
