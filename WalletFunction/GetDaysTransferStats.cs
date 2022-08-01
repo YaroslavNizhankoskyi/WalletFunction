@@ -12,9 +12,9 @@ using WalletFunction.Models;
 
 namespace WalletFunction
 {
-    internal class GetWeekTransferStats
+    internal class GetDaysTransferStats
     {
-        [FunctionName("GetWeekTransferStats")]
+        [FunctionName("GetDaysTransferStats")]
         public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "wallets/{walletId}/transfers/stats/days/{days}")] HttpRequest req,
         [CosmosDB(
