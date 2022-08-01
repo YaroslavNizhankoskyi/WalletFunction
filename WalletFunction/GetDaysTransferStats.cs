@@ -29,15 +29,20 @@ namespace WalletFunction
         IEnumerable<TransferDto> transferDtos,
         ILogger log, [FromRoute] int days)
         {
-            var income = transferDtos.Select(x => x.Amount).Sum();
+            var income = 0.0;
+            var transfersGroupedByDay = new List<IGrouping<DayOfWeek, TransferDto>>();
+
+            if (transferDtos.Any())
+            {
+                income = transferDtos.Select(x => x.Amount).Sum();
+                transfersGroupedByDay = transferDtos.GroupBy(x => x.Date.DayOfWeek).ToList();
+            }
 
             log.LogInformation(income.ToString());
             log.LogInformation(transferDtos.Count().ToString());
             log.LogInformation(Enum.GetName(typeof(DayOfWeek), transferDtos.First().Date.DayOfWeek));
 
-            var transfersGroupedByDay = transferDtos.GroupBy(x => x.Date.DayOfWeek);
-
-            var stats = new WeekTransferStats() { WeeklyIncome = income };
+            var stats = new PeriodTransferStats() { PeriodIncome = income };
 
             var today = DateTimeOffset.Now;
             
@@ -51,10 +56,10 @@ namespace WalletFunction
 
                 dayStat.Income = group == null ? 0 : group.Select(x => x.Amount).Sum();
 
-                stats.WeekStats.Add(dayStat);
+                stats.DaysStats.Add(dayStat);
             }
 
-            foreach(var day in stats.WeekStats)
+            foreach(var day in stats.DaysStats)
             {
                 stats.Days.Add(day.Day.Substring(0, 3));
                 stats.Incomes.Add(day.Income);
