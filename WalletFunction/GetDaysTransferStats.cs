@@ -40,7 +40,6 @@ namespace WalletFunction
 
             log.LogInformation(income.ToString());
             log.LogInformation(transferDtos.Count().ToString());
-            log.LogInformation(Enum.GetName(typeof(DayOfWeek), transferDtos.First().Date.DayOfWeek));
 
             var stats = new PeriodTransferStats() { PeriodIncome = income };
 
